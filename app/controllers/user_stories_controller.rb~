@@ -1,0 +1,24 @@
+class UserStoriesController < ApplicationController
+  unloadable
+
+  before_filter :find_project
+
+  def index
+    logger.info("####################################")
+    @stories = []
+    @project.issues.each do |issue|
+      if issue.tracker.name == "ストーリー"
+        @stories << issue
+      end
+      logger.info("issue: #{issue.author}")
+    end
+    logger.info("####################################")
+  end
+
+  private
+
+  def find_project
+    @project = Project.find(params[:project_id])
+  end
+  
+end

@@ -1,0 +1,47 @@
+<!-- <style type="text/css"> -->
+<!--   table.servers { -->
+<!--   width: 60%; -->
+<!--   } -->
+<!-- </style> -->
+
+<h2>ユーザーストーリー</h2>
+
+<% @stories.each do |story| %>
+  <h3><%= story.subject %></h3>
+  <table class="list issues">
+    <thead>
+      <tr>
+	<th>トラッカー</th>
+	<th>ステータス</th>
+	<th>優先度</th>
+	<th>題名</th>
+	<th>担当者</th>
+	<th>更新日</th>
+	<th>進捗％</th>
+      </tr>
+    </thead>
+    <% story.children.each do |issue| %>
+      <tbody>
+	<tr id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle("odd", "even") %> issue" >
+	  <td class="tracker"><%= issue.tracker.name %></td>
+	  <td class="status"><%= issue.status %></td>
+	  <td class="priority"><%= issue.priority %></td>
+	  <td class="subject"><%= issue.subject %></td>
+	  <td class="assigned_to"><%= issue.assigned_to %></td>
+	  <td class="updated_on"><%= issue.updated_on %></td>
+	  <td class="done_ratio">
+	    <table class="progress" style="width: 80px;">
+	      <tbody>
+		<tr>
+		  <td class="closed" style="width: 30%;"></td>
+		  <td class="todo" style="width: 70%;"></td>
+		</tr>
+	      </tbody>
+	    </table>
+	    <p class="pourcent"></p>
+	</tr>
+      </tbody>
+    <% end %>
+    </table>
+  <br />
+<% end %>

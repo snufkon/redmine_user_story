@@ -1,0 +1,31 @@
+<!-- <style type="text/css"> -->
+<!--   table.servers { -->
+<!--   width: 60%; -->
+<!--   } -->
+<!-- </style> -->
+
+<h2>ユーザーストーリー</h2>
+
+<% @stories.each do |story| %>
+  <h3><%= story.subject %></h3>
+  <table class="list issues">
+    <thead>
+      <tr>
+	<th>トラッカー</th>
+	<th>ステータス</th>
+	<th>優先度</th>
+	<th>題名</th>
+	<th>担当者</th>
+	<th>更新日</th>
+      </tr> 
+   </thead>
+    <% story.children.each do |issue| %>
+      <tbody>
+	<tr id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>">
+	<% @columns.each do |column| %><%= content_tag 'td', column_content(column, issue), :class => column.name %><% end %>
+	</tr>
+      </tbody>
+    <% end %>
+    </table>
+  <br />
+<% end %>
