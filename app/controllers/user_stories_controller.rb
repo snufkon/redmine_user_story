@@ -4,19 +4,26 @@ class UserStoriesController < ApplicationController
   before_filter :find_project
 
   helper :queries
+  include QueriesHelper
+  helper :sort
+  include SortHelper
+#  include IssuesHelper
 
   def index
+    retrieve_query
+    sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
+    sort_update(@query.sortable_columns)
+        
     logger.info("####################################")
     @stories = []
     @project.issues.each do |issue|
       if issue.tracker.name == "ストーリー"
         @stories << issue
       end
-      logger.info("issue: #{issue.author}")
     end
 
     query = Query.new
-    column_names = [:tracker, :status, :priority, :subject, :assigned_to, :updated_on]
+    column_names = [:tracker, :status, :priority, :subject, :assigned_to, :updated_on, :done_ratio]
     @columns = []
     column_names.each do |name|
       query.columns.each do |col|

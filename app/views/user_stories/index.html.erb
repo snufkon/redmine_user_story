@@ -1,31 +1,31 @@
-<!-- <style type="text/css"> -->
-<!--   table.servers { -->
-<!--   width: 60%; -->
-<!--   } -->
-<!-- </style> -->
-
 <h2>ユーザーストーリー</h2>
+<br />
 
 <% @stories.each do |story| %>
   <h3><%= story.subject %></h3>
-  <table class="list issues">
-    <thead>
-      <tr>
-	<th>トラッカー</th>
-	<th>ステータス</th>
-	<th>優先度</th>
-	<th>題名</th>
-	<th>担当者</th>
-	<th>更新日</th>
-      </tr> 
-   </thead>
-    <% story.children.each do |issue| %>
-      <tbody>
-	<tr id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>">
-	<% @columns.each do |column| %><%= content_tag 'td', column_content(column, issue), :class => column.name %><% end %>
+  <div class="autoscroll">
+    <table class="list issues">
+      <thead>
+	<tr>
+          <th class="checkbox hide-when-print"><%= link_to image_tag('toggle_check.png'), {}, :onclick => 'toggleIssuesSelection(Element.up(this, "form")); return false;',
+                                                   :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+          </th>
+	  <%= sort_header_tag('id', :caption => '#', :default_order => 'desc') %>
+          <% @query.columns.each do |column| %>
+            <%= column_header(column) %>
+          <% end %>
 	</tr>
+      </thead>
+      <% previous_group = false %>
+      <% story.children.each do |issue| %>
+	<tbody>
+	  <tr id="issue-<%= issue.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= issue.css_classes %>">
+	    <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", issue.id, false, :id => nil) %></td>
+	    <td class="id"><%= link_to issue.id, :controller => 'issues', :action => 'show', :id => issue %></td>
+            <% @query.columns.each do |column| %><%= content_tag 'td', column_content(column, issue), :class => column.name %><% end %>
+	  </tr>
       </tbody>
-    <% end %>
-    </table>
-  <br />
+      <% end %>
+  </table>
+</div>
 <% end %>
